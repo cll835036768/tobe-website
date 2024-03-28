@@ -22,6 +22,14 @@
 				"navigationBarTitleText" : "",
 				"enablePullDownRefresh" : false
 			}
+		},
+		{
+			"path" : "pages/study/index",
+			"style" : 
+			{
+				"navigationBarTitleText" : "留学计划",
+				"enablePullDownRefresh" : false
+			}
 		}
 	],
 	"globalStyle": {
