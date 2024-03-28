@@ -55,17 +55,9 @@
 					<view class="btn lightColor">欢迎加入TOBE大家庭</view>
 				</view>
 				<view class="countNumWrap">
-					<view class="countNum">
-						<view class="num">84%</view>
-						<view class="des">认为录取更好了</view>
-					</view>
-					<view class="countNum">
-						<view class="num">84%</view>
-						<view class="des">认为录取更好了</view>
-					</view>
-					<view class="countNum">
-						<view class="num">84%</view>
-						<view class="des">认为录取更好了</view>
+					<view class="countNum" v-for="(item,idx) in textconfigObj" :key="idx">
+						<view class="num">{{item.num}}</view>
+						<view class="des">{{item.name}}</view>
 					</view>
 				</view>
 				<view class="littleTag">
@@ -78,7 +70,9 @@
 		</view>
 		<view class="model5">
 			<view class="slogan">我们的合作伙伴</view>
-			<home-case :homecase="homecase"></home-case>
+			<template v-if="homecase.length">
+				<home-case :homecase="homecase"></home-case>
+			</template>
 		</view>
 		<view class="model6">
 			<view class="adsense">
@@ -92,7 +86,9 @@
 		</view>
 		<view class="model8">
 			<view class="slogan1">听听用户怎么说...</view>
-			<use-case :usecase="usecase"></use-case>
+			<template v-if="usecase.length">
+				<use-case :usecase="usecase"></use-case>
+			</template>
 			<view class="slogan2">
 				<span>TOBE正成为最具创造力和责任心的留学公司，</span><span
 					class="grayColor">致力于以创意方式助学生实现梦想。我们聚集最优秀的年轻人，恪守严格的道德准则，以几近苛刻的要求和最卓越的专业水平，为客户提供一流的留学咨询和能力培养服务。</span>
@@ -113,7 +109,8 @@
 		videoApi,
 		bannerApi,
 		configApi,
-		userSide
+		userSide,
+		textConfig
 	} from '@api/homeApi.js'
 	export default {
 		name: 'PagesIndex',
@@ -124,14 +121,15 @@
 		},
 		data() {
 			return {
-				usecase: [], // 1
-				homecase: [], // 1
+				textconfigObj:[],
+				usecase: [], // 
+				homecase: [], // 
 				model1ComImg: [],
 				// model1Comtext: {},
 				tagIcon,
-				middleBanner: '', // 1
-				bottomBanner: '', // 1
-				aboutUs: {}, // 1
+				middleBanner: '', // 
+				bottomBanner: '', // 
+				aboutUs: {}, // 
 				banner: [],
 				videoInfo: [],
 			}
@@ -159,7 +157,7 @@
 				}), bannerApi({
 					type: 5,
 					limit: 1
-				}), configApi({}), userSide({
+				}), configApi({}),textConfig({}),userSide({
 					type: 1,
 					limit: 5
 				})]);
@@ -170,7 +168,8 @@
 					homecase = [],
 					bottomBanner = '',
 					aboutUs = {},
-					usecase = [];
+					usecase = [],
+					textconfigObj= [];
 				resDataList.map((res, idx) => {
 					if (idx == 0) {
 						res.data.map(item => {
@@ -190,12 +189,15 @@
 							})
 						})
 					} else if (idx == 2) {
-						let siger = res.data.slice(0,1);
+						let siger = res.data.slice(0, 1);
 						let other = res.data.slice(1);
-						other.map((item,index) => {
-							if(index==2){
-								model1ComImg.push({img1:siger[0].image_text,img2:item.image_text})
-							}else{
+						other.map((item, index) => {
+							if (index == 2) {
+								model1ComImg.push({
+									img1: siger[0].image_text,
+									img2: item.image_text
+								})
+							} else {
 								model1ComImg.push(item.image_text)
 							}
 						})
@@ -216,13 +218,15 @@
 						})
 					} else if (idx == 6) {
 						aboutUs = res.data
-					} else if (idx == 7) {
+					} else if(idx==7){
+						this.textconfigObj = res.data;
+					}else if (idx == 8) {
 						res.data.map(item => {
 							usecase.push({
 								engineerUrl: item.image_text,
 								desc: item.text,
 								id: item.id,
-								name:item.name
+								name: item.name
 							})
 						})
 					}
@@ -250,6 +254,7 @@
 
 	.IndexPage {
 		width: 100%;
+
 		.banner {
 			&::v-deep .el-carousel__arrow {
 				width: 50px;

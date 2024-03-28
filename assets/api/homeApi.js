@@ -3,6 +3,7 @@ let routeUrl = {
 	video: "/index/index/getVideoList",
 	banner: "/index/index/getBannerList",
 	config: "/index/index/getConfig",
+	textConfig: "/index/index/getTextConfig",
 	menu: "/index/index/getMenu",
 	userSide: "/index/index/getUserSide",
 }
@@ -35,6 +36,14 @@ export function configApi(params) {
 		params,
 	})
 }
+export function textConfig(params) {
+	return axios({
+		url: routeUrl.textConfig,
+		method: 'get',
+		params,
+	})
+}
+
 export function userSide(params) {
 	return axios({
 		url: routeUrl.userSide,
